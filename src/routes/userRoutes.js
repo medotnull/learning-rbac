@@ -1,20 +1,15 @@
 const express = require('express');
-//const { signupController, loginController } = require('../controllers/authControllers');
+const { authorizeRoles } = require('../middleware/roleMiddleware');
+const { verifyToken } = require('../middleware/authMiddleware');
 const router = express.Router();    
 
-router.get("/admin", (req, res) => {
+router.get("/admin", verifyToken, authorizeRoles("admin"), (req, res) => {
     res.json(
         { message: "Admin route accessed" }
     );
 });
 
-router.get("/manager", (req, res) => {
-    res.json(
-        { message: "Manager route accessed" }
-    );
-});
-
-router.get("/user", (req, res) => {
+router.get("/user", verifyToken, authorizeRoles("user"), (req, res) => {
     res.json(
         { message: "User route accessed" }
     );

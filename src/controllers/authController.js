@@ -15,6 +15,11 @@ const signupController = async (req, res) => {
             role
         })
 
+        const existingUser = await User.findOne({ username: username.toLowerCase() });
+        if (existingUser) {
+            return res.status(400).json({ message: `User already exists with username ${username}` });
+        }
+        
         await newUser.save();
 
         res.status(201).json({
